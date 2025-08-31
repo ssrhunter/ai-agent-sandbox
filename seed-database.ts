@@ -76,7 +76,7 @@ type Employee = z.infer<typeof EmployeeSchema>;
 const parser = StructuredOutputParser.fromZodSchema(z.array(EmployeeSchema));
 
 async function generateSyntheticData(): Promise<Employee[]> {
-  const prompt = `You are a helpful assistant that generates employee data. Generate 5 fictional employee records. Each record should include the following fields: employee_id, first_name, last_name, date_of_birth, address, contact_details, job_details, work_location, reporting_manager, skills, performance_reviews, benefits, emergency_contact, notes. Ensure variety in the data and realistic values. The response should be in JSON format.
+  const prompt = `You are a helpful assistant that generates employee data. Generate 10 fictional employee records. Each record should include the following fields: employee_id, first_name, last_name, date_of_birth, address, contact_details, job_details, work_location, reporting_manager, skills, performance_reviews, benefits, emergency_contact, notes. Ensure variety in the data and realistic values. The response should be in JSON format.
   
     ${parser.getFormatInstructions()}`;
 
