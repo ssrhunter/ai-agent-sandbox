@@ -1,4 +1,5 @@
-import { ChatOpenAI, OpenAIEmbeddings } from "@langchain/openai";
+import { ChatOpenAI } from "@langchain/openai";
+import { OllamaEmbeddings } from "@langchain/ollama";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { MongoClient } from "mongodb";
 import { MongoDBAtlasVectorSearch } from "@langchain/mongodb";
@@ -8,13 +9,15 @@ import "dotenv/config";
 const mongoClient = new MongoClient(process.env.MONGODB_ATLAS_URI as string);
 
 const LM_STUDIO_BASE_URL = process.env.LM_STUDIO_BASE_URL;
+const OPENAI_KEY = process.env.OPENAI_API_KEY;
 const llm = new ChatOpenAI({
-  apiKey: "not-needed",
+  openAIApiKey: "no-key-required",
+  apiKey: "no-key-required",
   configuration: {
     baseURL: LM_STUDIO_BASE_URL,
   },
   timeout: 1200000,
-  modelName: "openai/gpt-oss-20b",
+  modelName: "qwen/qwen3-4b-2507",
   temperature: 0.7,
 });
 
@@ -130,7 +133,10 @@ async function seedDatabase(): Promise<void> {
     for (const record of recordsWithSummaries) {
       await MongoDBAtlasVectorSearch.fromDocuments(
         [record],
-        new OpenAIEmbeddings(),
+        new OllamaEmbeddings({
+          model: "nomic-embed-text",
+          baseUrl: "http://localhost:11434",
+        }),
         {
           collection,
           indexName: "vector_index",
